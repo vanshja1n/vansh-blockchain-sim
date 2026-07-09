@@ -45,7 +45,7 @@ class ViewTransactions extends Component {
         const txnsList = Array.isArray(txns) ? txns.map((txn, idx) => (
             <tr key={idx}>
                 <td className="hash-cell">
-                    {txn.from ? <HashDisplay hash={txn.from} /> : '⛏ System (Mining Reward)'}
+                    {txn.from ? <HashDisplay hash={txn.from} /> : <><span role="img" aria-label="pickaxe">⛏</span> System (Mining Reward)</>}
                 </td>
                 <td className="hash-cell">
                     {txn.to ? <HashDisplay hash={txn.to} /> : '-'}
@@ -62,7 +62,7 @@ class ViewTransactions extends Component {
         return (
             <div className="page-container">
                 <div className="page-header">
-                    <h1>🔍 Block <span className="accent-text">Transactions</span></h1>
+                    <h1><span role="img" aria-label="search">🔍</span> Block <span className="accent-text">Transactions</span></h1>
                     <p>Viewing all transactions recorded in this block</p>
                 </div>
                 <div className="glass-card" style={{padding: 0, overflow: 'hidden'}}>
@@ -84,7 +84,7 @@ class ViewTransactions extends Component {
                         </div>
                     ) : (
                         <div className="empty-state">
-                            <div className="empty-state-icon">📭</div>
+                            <div className="empty-state-icon"><span role="img" aria-label="empty mailbox">📭</span></div>
                             <h3>No Transactions Found</h3>
                             <p>This block doesn't contain any transactions yet.</p>
                         </div>

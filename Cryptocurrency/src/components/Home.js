@@ -69,7 +69,7 @@ class Home extends Component {
                         <div className="block-card-header">
                             <div className="block-number">
                                 <div className="block-icon">
-                                    {block.index === 0 ? '🌱' : `#${block.index}`}
+                                    {block.index === 0 ? <span role="img" aria-label="seedling">🌱</span> : `#${block.index}`}
                                 </div>
                                 <h3>{block.index === 0 ? 'Genesis Block' : `Block ${block.index}`}</h3>
                             </div>
@@ -77,39 +77,39 @@ class Home extends Component {
                         </div>
                         <div className="block-card-body">
                             <div className="block-field">
-                                <span className="block-field-label">⏱ Timestamp</span>
+                                <span className="block-field-label"><span role="img" aria-label="stopwatch">⏱</span> Timestamp</span>
                                 <span className="block-field-value">{new Date(block.timestamp).toLocaleString()}</span>
                             </div>
                             <div className="block-field">
-                                <span className="block-field-label">🔗 Block Hash</span>
+                                <span className="block-field-label"><span role="img" aria-label="link">🔗</span> Block Hash</span>
                                 <span className="block-field-value">
                                     <HashDisplay hash={block.hash} />
                                 </span>
                             </div>
                             <div className="block-field">
-                                <span className="block-field-label">⬅️ Previous Hash</span>
+                                <span className="block-field-label"><span role="img" aria-label="arrow">⬅️</span> Previous Hash</span>
                                 <span className="block-field-value">
                                     <HashDisplay hash={block.prevHash} />
                                 </span>
                             </div>
                             <div className="block-field">
-                                <span className="block-field-label">⛏️ Difficulty</span>
+                                <span className="block-field-label"><span role="img" aria-label="pickaxe">⛏️</span> Difficulty</span>
                                 <span className="block-field-value">{diffDisplay}</span>
                             </div>
                             <div className="block-field">
-                                <span className="block-field-label">🔢 Nonce</span>
+                                <span className="block-field-label"><span role="img" aria-label="numbers">🔢</span> Nonce</span>
                                 <span className="block-field-value nonce">{block.nonce}</span>
                             </div>
                             <div className="block-field">
-                                <span className="block-field-label">⏱️ Mining Time</span>
+                                <span className="block-field-label"><span role="img" aria-label="stopwatch">⏱️</span> Mining Time</span>
                                 <span className="block-field-value">{miningTimeDisplay}</span>
                             </div>
                             <div className="block-field">
-                                <span className="block-field-label">📈 Transactions</span>
+                                <span className="block-field-label"><span role="img" aria-label="chart">📈</span> Transactions</span>
                                 <span className="block-field-value">{Array.isArray(block.transactions) ? block.transactions.length : 0}</span>
                             </div>
                             <div className="block-field">
-                                <span className="block-field-label">📦 Block Size</span>
+                                <span className="block-field-label"><span role="img" aria-label="package">📦</span> Block Size</span>
                                 <span className="block-field-value">{blockSizeKB} KB</span>
                             </div>
                             <Link to={{pathname:'/view-transactions/' + block.index, query:{blockchain: this.state.chain, index: block.index}}} className="btn-gradient btn-full-width">
@@ -123,13 +123,13 @@ class Home extends Component {
             return(
                 <div className="page-container">
                     <div className="page-header">
-                        <h1>⛓ Blockchain <span className="accent-text">Explorer</span></h1>
+                        <h1><span role="img" aria-label="chains">⛓</span> Blockchain <span className="accent-text">Explorer</span></h1>
                         <p>Inspect all mined blocks and their transactions on the chain</p>
                     </div>
                     
                     <div className="dashboard-grid">
                         <div className="dashboard-card">
-                            <div className="dashboard-icon">👛</div>
+                            <div className="dashboard-icon"><span role="img" aria-label="wallet">👛</span></div>
                             <div className="dashboard-content">
                                 <span className="label">Wallet Balance</span>
                                 <span className="value" style={{color: 'var(--accent-cyan)'}}>{this.state.balance} KPT</span>
@@ -137,7 +137,7 @@ class Home extends Component {
                         </div>
                         
                         <div className="dashboard-card">
-                            <div className="dashboard-icon">🧱</div>
+                            <div className="dashboard-icon"><span role="img" aria-label="brick">🧱</span></div>
                             <div className="dashboard-content">
                                 <span className="label">Total Blocks</span>
                                 <span className="value" style={{color: 'var(--accent-purple)'}}>{this.state.chain.length}</span>
@@ -145,7 +145,7 @@ class Home extends Component {
                         </div>
 
                         <div className="dashboard-card">
-                            <div className="dashboard-icon">⏳</div>
+                            <div className="dashboard-icon"><span role="img" aria-label="hourglass">⏳</span></div>
                             <div className="dashboard-content">
                                 <span className="label">Pending Transactions</span>
                                 <span className="value" style={{color: 'var(--accent-orange)'}}>{this.state.pendingTxnsLength}</span>
@@ -153,7 +153,7 @@ class Home extends Component {
                         </div>
 
                         <div className="dashboard-card">
-                            <div className="dashboard-icon">⚙️</div>
+                            <div className="dashboard-icon"><span role="img" aria-label="gear">⚙️</span></div>
                             <div className="dashboard-content">
                                 <span className="label">Mining Difficulty</span>
                                 <span className="value" style={{color: 'var(--accent-green)'}}>{this.props.blockchain.difficulty}</span>
@@ -168,7 +168,7 @@ class Home extends Component {
                     </div>
                     
                     <div className="section-header" style={{ marginTop: '40px' }}>
-                        <h2>🌐 Network Statistics</h2>
+                        <h2><span role="img" aria-label="globe">🌐</span> Network Statistics</h2>
                     </div>
                     <div className="stats-grid">
                         <div className="stat-card">

@@ -33,7 +33,7 @@ const HashDisplay = ({ hash, isAddress = false, copyFull = true }) => {
                 }}
                 title="Copy to clipboard"
             >
-                {copied ? '✓' : '📋'}
+                {copied ? <span role="img" aria-label="check">✓</span> : <span role="img" aria-label="clipboard">📋</span>}
             </button>
             {copied && (
                 <div style={{

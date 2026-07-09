@@ -28,7 +28,7 @@ class MyWallet extends Component {
             return(
                 <div className="page-container">
                     <div className="page-header">
-                        <h1>👛 My <span className="accent-text">Wallet</span></h1>
+                        <h1><span role="img" aria-label="wallet">👛</span> My <span className="accent-text">Wallet</span></h1>
                         <p>Your personal wallet overview and account details</p>
                     </div>
                     <div className="wallet-hero">
@@ -52,7 +52,7 @@ class MyWallet extends Component {
                         </div>
 
                         <div className="wallet-address-section">
-                            <div className="wallet-address-label">🔑 Your Public Key</div>
+                            <div className="wallet-address-label"><span role="img" aria-label="key">🔑</span> Your Public Key</div>
                             <div className="wallet-address">
                                 <HashDisplay hash={this.state.publicKey} isAddress={true} copyFull={true} />
                             </div>

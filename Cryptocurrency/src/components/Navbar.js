@@ -16,7 +16,7 @@ class Navbar extends Component {
         return (
             <nav className="navbar navbar-expand-lg navbar-dark navbar-custom">
                 <NavLink className="navbar-brand" to="/">
-                    <span className="brand-icon">⛓</span>
+                    <span className="brand-icon" role="img" aria-label="chains">⛓</span>
                     <b>Vansh Blockchain v4</b>
                 </NavLink>
                 <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
@@ -26,22 +26,22 @@ class Navbar extends Component {
                     <ul className="navbar-nav mr-auto">
                         <li className="nav-item">
                             <NavLink exact className="nav-link" activeClassName="active" to="/">
-                                🏠 Home
+                                <span role="img" aria-label="house">🏠</span> Home
                             </NavLink>
                         </li>
                         <li className="nav-item">
                             <NavLink className="nav-link" activeClassName="active" to="/create-transaction">
-                                💸 Create Transaction
+                                <span role="img" aria-label="money">💸</span> Create Transaction
                             </NavLink>
                         </li>
                         <li className="nav-item">
                             <NavLink className="nav-link" activeClassName="active" to="/pending-transactions">
-                                ⏳ Pending Transactions
+                                <span role="img" aria-label="hourglass">⏳</span> Pending Transactions
                             </NavLink>
                         </li>
                         <li className="nav-item">
                             <NavLink className="nav-link" activeClassName="active" to="/my-wallet">
-                                👛 My Wallet
+                                <span role="img" aria-label="wallet">👛</span> My Wallet
                             </NavLink>
                         </li>
                     </ul>

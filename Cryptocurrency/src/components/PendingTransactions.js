@@ -61,7 +61,7 @@ class PendingTransactions extends Component {
             return(
                 <tr key={idx}>
                     <td className="hash-cell">
-                        {pendingTxn.from ? <HashDisplay hash={pendingTxn.from} /> : '⛏ System (Mining Reward)'}
+                        {pendingTxn.from ? <HashDisplay hash={pendingTxn.from} /> : <><span role="img" aria-label="pickaxe">⛏</span> System (Mining Reward)</>}
                     </td>
                     <td className="hash-cell">
                         {pendingTxn.to ? <HashDisplay hash={pendingTxn.to} /> : '-'}
@@ -80,7 +80,7 @@ class PendingTransactions extends Component {
             return(
                 <div className="page-container">
                     <div className="page-header">
-                        <h1>⏳ Pending <span className="accent-text">Transactions</span></h1>
+                        <h1><span role="img" aria-label="hourglass">⏳</span> Pending <span className="accent-text">Transactions</span></h1>
                         <p>These transactions are waiting to be included in the next mined block</p>
                     </div>
 
@@ -88,7 +88,7 @@ class PendingTransactions extends Component {
                     <div className={`mining-overlay ${isMining ? 'active' : ''}`}>
                         <div className="mining-modal">
                             <div className="mining-spinner"></div>
-                            <h2>⛏ Mining Block...</h2>
+                            <h2><span role="img" aria-label="pickaxe">⛏</span> Mining Block...</h2>
                             <p>Finding valid nonce...</p>
                             <p style={{fontSize: '0.8rem', opacity: 0.7}}>Difficulty: {this.props.blockchain.difficulty}</p>
                         </div>
@@ -97,7 +97,7 @@ class PendingTransactions extends Component {
                     {/* Success banner after mining */}
                     {justMined && !isMining && (
                         <div className="alert-modern success" style={{marginBottom: '1.5rem'}}>
-                            ✅ Block mined successfully! Mining reward of <strong>100 KPT</strong> has been credited to your wallet.
+                            <span role="img" aria-label="check">✅</span> Block mined successfully! Mining reward of <strong>100 KPT</strong> has been credited to your wallet.
                         </div>
                     )}
 
@@ -120,7 +120,7 @@ class PendingTransactions extends Component {
                             </div>
                         ) : (
                             <div className="empty-state">
-                                <div className="empty-state-icon">📭</div>
+                                <div className="empty-state-icon"><span role="img" aria-label="empty mailbox">📭</span></div>
                                 <h3>No Pending Transactions</h3>
                                 <p>Create a transaction first, then come back here to mine it into a block.</p>
                             </div>
@@ -138,7 +138,7 @@ class PendingTransactions extends Component {
                             disabled={!hasPendingTxns || isMining}
                             title={!hasPendingTxns ? 'No transactions to mine' : 'Mine all pending transactions into a new block'}
                         >
-                            <span className="mine-icon">⛏</span> Mine Pending Transactions
+                            <span className="mine-icon" role="img" aria-label="pickaxe">⛏</span> Mine Pending Transactions
                         </button>
                     </div>
                 </div>

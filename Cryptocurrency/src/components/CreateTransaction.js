@@ -64,7 +64,7 @@ class CreateTransaction extends Component {
             return (
                 <div className="page-container">
                     <div className="page-header">
-                        <h1>💸 Create <span className="accent-text">Transaction</span></h1>
+                        <h1><span role="img" aria-label="money">💸</span> Create <span className="accent-text">Transaction</span></h1>
                         <p>Send cryptocurrency to another wallet address on the blockchain</p>
                     </div>
                     <div className="glass-card" style={{maxWidth: 680}}>
@@ -108,7 +108,7 @@ class CreateTransaction extends Component {
                                 onClick={this.onsubmitForm}
                                 style={{marginTop: '0.5rem'}}
                             >
-                                🚀 Sign & Create Transaction
+                                <span role="img" aria-label="rocket">🚀</span> Sign & Create Transaction
                             </button>
                         </form>
                     </div>
