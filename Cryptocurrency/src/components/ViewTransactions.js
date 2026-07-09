@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Loader from './Loader';
+import HashDisplay from './HashDisplay';
 
 class ViewTransactions extends Component {
     constructor(props){
@@ -25,7 +26,6 @@ class ViewTransactions extends Component {
                 loading: false
             });
         } else {
-            // In case blockchain or transactions are not available, set loading false and txns empty array
             this.setState({
                 blockchain,
                 txns: [],
@@ -43,30 +43,52 @@ class ViewTransactions extends Component {
         }
 
         const txnsList = Array.isArray(txns) ? txns.map((txn, idx) => (
-            <tr key={idx} style={{ height: 100 }}>
-                <td><p style={{ wordBreak: "break-all" }}>{txn.from}</p></td>
-                <td>{txn.to}</td>
-                <td>{txn.amount}</td>
-                <td>{txn.isTxnValid ? txn.isTxnValid().toString() : 'N/A'}</td>
+            <tr key={idx}>
+                <td className="hash-cell">
+                    {txn.from ? <HashDisplay hash={txn.from} /> : '⛏ System (Mining Reward)'}
+                </td>
+                <td className="hash-cell">
+                    {txn.to ? <HashDisplay hash={txn.to} /> : '-'}
+                </td>
+                <td className="amount-cell">{txn.amount} Kryptos</td>
+                <td>
+                    <span className={`valid-badge ${txn.isTxnValid ? (txn.isTxnValid().toString() === 'true' ? 'valid' : 'invalid') : ''}`}>
+                        {txn.isTxnValid ? (txn.isTxnValid().toString() === 'true' ? '✓ Valid' : '✗ Invalid') : 'N/A'}
+                    </span>
+                </td>
             </tr>
         )) : null;
 
         return (
-            <div className="container">
-                <div className="table-responsive">
-                    <table border="1" className="table" style={{ marginTop: 20 }}>
-                        <thead>
-                            <tr>
-                                <th scope="col-xs-2">From</th>
-                                <th scope="col-xs-2">To</th>
-                                <th scope="col-xs-5">Amount</th>
-                                <th scope="col-xs-3">Valid?</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {txnsList}
-                        </tbody>
-                    </table>
+            <div className="page-container">
+                <div className="page-header">
+                    <h1>🔍 Block <span className="accent-text">Transactions</span></h1>
+                    <p>Viewing all transactions recorded in this block</p>
+                </div>
+                <div className="glass-card" style={{padding: 0, overflow: 'hidden'}}>
+                    {txns && txns.length > 0 ? (
+                        <div style={{overflowX: 'auto'}}>
+                            <table className="table-modern">
+                                <thead>
+                                    <tr>
+                                        <th>From</th>
+                                        <th>To</th>
+                                        <th>Amount</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {txnsList}
+                                </tbody>
+                            </table>
+                        </div>
+                    ) : (
+                        <div className="empty-state">
+                            <div className="empty-state-icon">📭</div>
+                            <h3>No Transactions Found</h3>
+                            <p>This block doesn't contain any transactions yet.</p>
+                        </div>
+                    )}
                 </div>
             </div>
         );

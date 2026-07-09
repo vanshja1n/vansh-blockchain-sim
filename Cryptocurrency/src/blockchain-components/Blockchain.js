@@ -14,15 +14,18 @@ class Blockchain {
   }
 
   minePendingTxns(minerAddr) {
+    const rewardTx = new Transaction(null, minerAddr, this.miningReward);
+
+    const allTxns = [...this.pendingTxns, rewardTx];
+
     const newIndex = this.getLatestBlock().index + 1;
-    const block = new Block(newIndex, Date.now(), this.pendingTxns);
+    const block = new Block(newIndex, Date.now(), allTxns);
     block.prevHash = this.getLatestBlock().hash;
     block.mineBlock(this.difficulty);
     this.chain.push(block);
 
-    this.pendingTxns = [
-      new Transaction(null, minerAddr, this.miningReward)
-    ];
+
+    this.pendingTxns = [];
 
     return true;
   }
@@ -70,7 +73,7 @@ class Blockchain {
       if (currentBlock.calculateBlockHash() !== currentBlock.hash) {
         return false;
       }
-      // Fix here: call the method to check txn validity, not just the reference
+
       if (!currentBlock.checkValidityOfTxns()) {
         return false;
       }

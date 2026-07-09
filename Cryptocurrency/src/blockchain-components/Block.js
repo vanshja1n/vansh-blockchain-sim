@@ -8,6 +8,8 @@ class Block{
         this.hash = this.calculateBlockHash();
         this.prevHash = 0;
         this.nonce = 0;
+        this.difficulty = 0;
+        this.miningTime = 0;
     }
 
     calculateBlockHash(){
@@ -15,11 +17,15 @@ class Block{
     }
 
     mineBlock(difficulty){
+        this.difficulty = difficulty;
+        const startTime = Date.now();
         while(this.hash.substring(0, difficulty) !== Array(difficulty + 1).join('0')){
             this.nonce += 1;
             this.hash = this.calculateBlockHash();
         }
-        console.log('Block mined!');
+        const endTime = Date.now();
+        this.miningTime = (endTime - startTime) / 1000;
+        console.log(`Block mined in ${this.miningTime} seconds!`);
     }
 
     checkValidityOfTxns(){

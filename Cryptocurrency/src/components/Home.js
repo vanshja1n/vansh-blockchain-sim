@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
 import Loader from './Loader';
+import HashDisplay from './HashDisplay';
 import '../index.css';
 
 class Home extends Component {
@@ -8,40 +9,198 @@ class Home extends Component {
         super(props);
         this.state = {
             loading: true,
-            components: null,
-            chain: null
+            chain: null,
+            balance: 0,
+            pendingTxnsLength: 0,
         }
     }
 
-    componentWillMount(){
+    componentDidMount(){
+        let balance = 0;
+        if (this.props.publicKey) {
+             const startBal = Array.isArray(this.props.balance) ? this.props.balance[0] : (this.props.balance || 0);
+             balance = this.props.blockchain.getBalance(this.props.publicKey, startBal);
+        }
+
         this.setState({
             loading: false,
-            chain: this.props.blockchain.chain
+            chain: this.props.blockchain.chain,
+            balance: balance,
+            pendingTxnsLength: this.props.blockchain.getPendingTxns().length,
         })
     }
 
     render() {
         if(this.state.loading === false){
+            
+            let totalTxns = 0;
+            let circulatingSupply = 0;
+            let totalMiningTime = 0;
+            let blocksWithTime = 0;
+
+            this.state.chain.forEach(block => {
+                totalTxns += Array.isArray(block.transactions) ? block.transactions.length : 0;
+                
+                if (Array.isArray(block.transactions)) {
+                    block.transactions.forEach(tx => {
+                        if (tx.from === null) {
+                            circulatingSupply += tx.amount;
+                        }
+                    });
+                }
+                
+                if (block.miningTime) {
+                    totalMiningTime += block.miningTime;
+                    blocksWithTime++;
+                }
+            });
+
+            const avgBlockTime = blocksWithTime > 0 ? (totalMiningTime / blocksWithTime).toFixed(2) : '0.00';
+            const avgTxnsPerBlock = this.state.chain.length > 0 ? (totalTxns / this.state.chain.length).toFixed(1) : '0';
+
             const blockList = this.state.chain.map(block => {
+                const blockSizeKB = (JSON.stringify(block).length / 1024).toFixed(2);
+                
+                const diffDisplay = block.index === 0 ? "N/A" : (block.difficulty || 0);
+                const miningTimeDisplay = block.index === 0 ? "N/A" : (block.miningTime ? `${block.miningTime.toFixed(2)} sec` : '0.00 sec');
+
                 return (
-                    <div className="col-sm-3" key={block.index}>
-                        <div className="card h-100 w-85" style={{background: '#333333'}}>
-                            <div className="card-body bg-white text-dark">
-                                <h5 className="card-title "><b className="text-warning">Block {block.index}</b></h5>
-                                <p className="card-text"><b className="text-danger">Timestamp</b>  &nbsp;{block.timestamp}</p>
-                                <p className="card-text"><b className="text-danger">Block Hash</b>  &nbsp;{block.hash}</p>
-                                <p className="card-text"><b className="text-danger">Previous Block Hash</b>  &nbsp;{block.prevHash}</p>
-                                <p className="card-text"><b className="text-danger">Nonce</b>  &nbsp;{block.nonce}</p>
-                                <Link to={{pathname:'/view-transactions/' + block.index, query:{blockchain: this.state.chain, index: block.index}}}  className="btn btn-primary">View Transactions</Link>
+                    <div className="block-card" key={block.index}>
+                        <div className="block-card-header">
+                            <div className="block-number">
+                                <div className="block-icon">
+                                    {block.index === 0 ? '🌱' : `#${block.index}`}
+                                </div>
+                                <h3>{block.index === 0 ? 'Genesis Block' : `Block ${block.index}`}</h3>
                             </div>
+                            <span className="block-status">✓ Verified</span>
+                        </div>
+                        <div className="block-card-body">
+                            <div className="block-field">
+                                <span className="block-field-label">⏱ Timestamp</span>
+                                <span className="block-field-value">{new Date(block.timestamp).toLocaleString()}</span>
+                            </div>
+                            <div className="block-field">
+                                <span className="block-field-label">🔗 Block Hash</span>
+                                <span className="block-field-value">
+                                    <HashDisplay hash={block.hash} />
+                                </span>
+                            </div>
+                            <div className="block-field">
+                                <span className="block-field-label">⬅️ Previous Hash</span>
+                                <span className="block-field-value">
+                                    <HashDisplay hash={block.prevHash} />
+                                </span>
+                            </div>
+                            <div className="block-field">
+                                <span className="block-field-label">⛏️ Difficulty</span>
+                                <span className="block-field-value">{diffDisplay}</span>
+                            </div>
+                            <div className="block-field">
+                                <span className="block-field-label">🔢 Nonce</span>
+                                <span className="block-field-value nonce">{block.nonce}</span>
+                            </div>
+                            <div className="block-field">
+                                <span className="block-field-label">⏱️ Mining Time</span>
+                                <span className="block-field-value">{miningTimeDisplay}</span>
+                            </div>
+                            <div className="block-field">
+                                <span className="block-field-label">📈 Transactions</span>
+                                <span className="block-field-value">{Array.isArray(block.transactions) ? block.transactions.length : 0}</span>
+                            </div>
+                            <div className="block-field">
+                                <span className="block-field-label">📦 Block Size</span>
+                                <span className="block-field-value">{blockSizeKB} KB</span>
+                            </div>
+                            <Link to={{pathname:'/view-transactions/' + block.index, query:{blockchain: this.state.chain, index: block.index}}} className="btn-gradient btn-full-width">
+                                View Transactions →
+                            </Link>
                         </div>
                     </div>
                 )
             })
+            
             return(
-                <div className="row" style={{marginTop: 10, padding: 10}}>
-                    {blockList}
-                </div> 
+                <div className="page-container">
+                    <div className="page-header">
+                        <h1>⛓ Blockchain <span className="accent-text">Explorer</span></h1>
+                        <p>Inspect all mined blocks and their transactions on the chain</p>
+                    </div>
+                    
+                    <div className="dashboard-grid">
+                        <div className="dashboard-card">
+                            <div className="dashboard-icon">👛</div>
+                            <div className="dashboard-content">
+                                <span className="label">Wallet Balance</span>
+                                <span className="value" style={{color: 'var(--accent-cyan)'}}>{this.state.balance} KPT</span>
+                            </div>
+                        </div>
+                        
+                        <div className="dashboard-card">
+                            <div className="dashboard-icon">🧱</div>
+                            <div className="dashboard-content">
+                                <span className="label">Total Blocks</span>
+                                <span className="value" style={{color: 'var(--accent-purple)'}}>{this.state.chain.length}</span>
+                            </div>
+                        </div>
+
+                        <div className="dashboard-card">
+                            <div className="dashboard-icon">⏳</div>
+                            <div className="dashboard-content">
+                                <span className="label">Pending Transactions</span>
+                                <span className="value" style={{color: 'var(--accent-orange)'}}>{this.state.pendingTxnsLength}</span>
+                            </div>
+                        </div>
+
+                        <div className="dashboard-card">
+                            <div className="dashboard-icon">⚙️</div>
+                            <div className="dashboard-content">
+                                <span className="label">Mining Difficulty</span>
+                                <span className="value" style={{color: 'var(--accent-green)'}}>{this.props.blockchain.difficulty}</span>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <div className="blocks-grid">
+                        {blockList}
+                    </div>
+                    
+                    <div className="section-header" style={{ marginTop: '40px' }}>
+                        <h2>🌐 Network Statistics</h2>
+                    </div>
+                    <div className="stats-grid">
+                        <div className="stat-card">
+                            <span className="stat-label">Chain Length</span>
+                            <span className="stat-value cyan">{this.state.chain.length}</span>
+                        </div>
+                        <div className="stat-card">
+                            <span className="stat-label">Total Txns</span>
+                            <span className="stat-value purple">{totalTxns}</span>
+                        </div>
+                        <div className="stat-card">
+                            <span className="stat-label">Circulating Coins</span>
+                            <span className="stat-value orange">{circulatingSupply} KPT</span>
+                        </div>
+                        <div className="stat-card">
+                            <span className="stat-label">Pending Txns</span>
+                            <span className="stat-value red">{this.state.pendingTxnsLength}</span>
+                        </div>
+                        <div className="stat-card">
+                            <span className="stat-label">Avg Block Time</span>
+                            <span className="stat-value green">{avgBlockTime}s</span>
+                        </div>
+                        <div className="stat-card">
+                            <span className="stat-label">Avg Txns / Block</span>
+                            <span className="stat-value cyan">{avgTxnsPerBlock}</span>
+                        </div>
+                        <div className="stat-card">
+                            <span className="stat-label">Difficulty</span>
+                            <span className="stat-value orange">{this.props.blockchain.difficulty}</span>
+                        </div>
+                    </div>
+                </div>
             );
         
         }else {

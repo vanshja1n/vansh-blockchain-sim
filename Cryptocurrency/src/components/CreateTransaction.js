@@ -62,23 +62,57 @@ class CreateTransaction extends Component {
 
         if(this.state.loading === false){
             return (
-                <div className="container" style={{padding: 10, marginTop: 50}}>
-                <form>
-                    <div className="form-group">
-                        <label className="text-dark" htmlFor="my_addr">Your address/public key</label>
-                        <input type="text" className="form-control" value={this.state.publicKey} id="publicKey" onChange={this.onchangeInput} disabled/>
+                <div className="page-container">
+                    <div className="page-header">
+                        <h1>💸 Create <span className="accent-text">Transaction</span></h1>
+                        <p>Send cryptocurrency to another wallet address on the blockchain</p>
                     </div>
-                    <div className="form-group">
-                        <label className="text-dark" htmlFor="recv_addr">Receiver's address/public key</label>
-                        <input type="text" className="form-control" id="recv_addr" onChange={this.onchangeInput}/>
+                    <div className="glass-card" style={{maxWidth: 680}}>
+                        <form className="form-modern">
+                            <div className="form-group-modern">
+                                <label htmlFor="publicKey">Your Address / Public Key</label>
+                                <input 
+                                    type="text" 
+                                    className="form-input mono" 
+                                    value={this.state.publicKey} 
+                                    id="publicKey" 
+                                    onChange={this.onchangeInput} 
+                                    disabled
+                                />
+                                <span className="form-helper">This is your wallet's public address — it cannot be changed</span>
+                            </div>
+                            <div className="form-group-modern">
+                                <label htmlFor="recv_addr">Receiver's Address / Public Key</label>
+                                <input 
+                                    type="text" 
+                                    className="form-input mono" 
+                                    id="recv_addr" 
+                                    onChange={this.onchangeInput} 
+                                    placeholder="Paste recipient's public key..."
+                                />
+                            </div>
+                            <div className="form-group-modern">
+                                <label htmlFor="amount">Amount (Kryptos)</label>
+                                <input 
+                                    type="text" 
+                                    className="form-input" 
+                                    id="amount" 
+                                    onChange={this.onchangeInput} 
+                                    placeholder="0.00"
+                                />
+                                <span className="form-helper">Available balance: <strong style={{color: '#00d4ff'}}>{this.state.balance} Kryptos</strong></span>
+                            </div>
+                            <button 
+                                type="submit" 
+                                className="btn-gradient" 
+                                onClick={this.onsubmitForm}
+                                style={{marginTop: '0.5rem'}}
+                            >
+                                🚀 Sign & Create Transaction
+                            </button>
+                        </form>
                     </div>
-                    <div className="form-group">
-                        <label className="text-dark" htmlFor="amount">Amount of crypto to be transferred</label>
-                        <input type="text" className="form-control" id="amount" onChange={this.onchangeInput}/>
-                    </div>
-                    <button type="submit" className="btn btn-primary" onClick={this.onsubmitForm}>Create Transaction</button>
-                </form>
-            </div>
+                </div>
             )
         }else{
             return(

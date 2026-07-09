@@ -43,7 +43,7 @@ class App extends Component{
                     <div className="App">
                         <main>
                             <NavBar account={this.state.account}/>
-                            <Route exact path = "/" component={(() => <Home blockchain={this.state.blockchain} />)} />
+                            <Route exact path = "/" component={(() => <Home blockchain={this.state.blockchain} publicKey={this.state.publicKey} balance={this.state.balance} />)} />
                             <Route exact path="/create-transaction" component={(() => <CreateTransaction blockchain={this.state.blockchain} publicKey={this.state.publicKey} privateKey={this.state.privateKey} myKey={this.state.key} updateMyBalance={this.updateBalance} balance={this.state.balance}/>)} />
                             <Route exact path="/pending-transactions" component={(() => <PendingTransactions blockchain={this.state.blockchain} publicKey={this.state.publicKey}/>)} />
                             <Route exact path="/my-wallet" component={(() => <MyWallet blockchain={this.state.blockchain} publicKey={this.state.publicKey} balance={this.state.balance}/>)} />
