@@ -1,4 +1,4 @@
-# 🔗 Simple Blockchain Simulator
+# 🔗 Blockchain Simulator
 
 A minimal blockchain implementation in JavaScript using the `elliptic` npm package, showcasing how public/private key cryptography and digital signatures work in a blockchain context.
 
